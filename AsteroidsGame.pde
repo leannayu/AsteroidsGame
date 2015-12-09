@@ -1,4 +1,5 @@
 SpaceShip bob;
+Asteroids[] asteroid = new Asteroids[50];
 Star[] stars = new Star[200];
 public void setup() 
 {
@@ -7,6 +8,10 @@ public void setup()
   for (int i= 0; i < 200; i++)
   {
     stars[i] = new Star();
+  }
+  for (int a = 0; a <50; a++)
+  {
+    asteroid[a] = new Asteroids(); 
   }
 }
 public void draw() 
@@ -17,6 +22,11 @@ public void draw()
   for (int i= 0; i < 200; i++)
   {
     stars[i].show();
+  }
+  for (int a = 0; a < 50; a++)
+  {
+    asteroid[a].show();
+    asteroid[a].move();
   }
 }
 
@@ -63,11 +73,13 @@ class SpaceShip extends Floater
   public SpaceShip ()  
   {
     corners = 4;
-    int[] xS = {-5, 10, -5, -2};
-    int[] yS = {-5, 0, 5, 0};
+    int[] xS = {-8, 13, -8, -5};
+    int[] yS = {-8, 0, 8, 0};
     xCorners = xS;
     yCorners = yS;
-    myColor = 180;
+    myColorR = (int)(Math.random()*255);
+    myColorG = (int)(Math.random()*255);
+    myColorB = (int)(Math.random()*255);
     myCenterX = 300; 
     myCenterY = 300;
     myDirectionX = 0;
@@ -84,12 +96,49 @@ class SpaceShip extends Floater
   public void setPointDirection(int degrees) {myPointDirection = degrees;}
   public double getPointDirection() {return (int)myPointDirection;}
 }
+class Asteroids extends Floater
+{
+  private int rotSpeed;
+  public Asteroids ()
+  {
+    corners = 6;
+    int[] xS = {-7, 3, 9, 2, -7, -1};
+    int[] yS = {-4, -4, 0, 6, 4, 0};
+    xCorners = xS;
+    yCorners = yS;
+    myColorR = 180;
+    myColorG = 180;
+    myColorB = 180;
+    myCenterX = (int)(Math.random()*600);
+    myCenterY = (int)(Math.random()*600);
+    myDirectionX = (int)(Math.random()*5)-2;
+    myDirectionY = (int)(Math.random()*5)-2;
+    rotSpeed = (int)(Math.random()*5)-2;
+  }
+  public void setX(int x) {myCenterX = x;}
+  public int getX() {return (int)myCenterX;}   
+  public void setY(int y) {myCenterY = y;}   
+  public int getY() {return (int)myCenterY;}
+  public void setDirectionX(double x) {myDirectionX = x;}
+  public double getDirectionX() {return (double)myDirectionX;}
+  public void setDirectionY(double y) {myDirectionY = y;}   
+  public double getDirectionY() {return (double)myDirectionY;}
+  public void setPointDirection(int degrees) {myPointDirection = degrees;}
+  public double getPointDirection() {return (int)myPointDirection;}
+  public void move() 
+  {
+    rotate(rotSpeed);
+    super.move();
+  }
+}
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
   protected int[] xCorners;   
   protected int[] yCorners;   
-  protected int myColor;   
+  protected int myColorR;
+  protected int myColorG; 
+  protected int myColorB;  
   protected double myCenterX, myCenterY; //holds center coordinates   
   protected double myDirectionX, myDirectionY; //holds x and y coordinates of the vector for direction of travel   
   protected double myPointDirection; //holds current direction the ship is pointing in degrees      
@@ -133,8 +182,8 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
   }   
   public void show ()  //Draws the floater at the current position  
   {             
-    fill(myColor);   
-    stroke(myColor);    
+    fill(myColorR, myColorG, myColorB);   
+    stroke(myColorR, myColorG, myColorB);    
     //convert degrees to radians for sin and cos         
     double dRadians = myPointDirection*(Math.PI/180);                 
     int xRotatedTranslated, yRotatedTranslated;    
